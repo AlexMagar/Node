@@ -1,0 +1,28 @@
+### Testing server status
+GET http://localhost:8000/
+
+
+### get all the tasks from api 
+GET http://localhost:8000/api/v1/task
+
+### send task to  api 
+POST http://localhost:8000/api/v1/task
+Content-Type: application/json
+
+{
+    "task": "sf tv",
+    "hr": 22,
+    "type": "entry",
+    "_id": "004"
+}
+
+### updat task at api 
+PUT http://localhost:8000/api/v1/task
+
+### delete task from  api 
+Delete http://localhost:8000/api/v1/task
+Content-Type: application/json
+
+{
+    "_id": "004"
+}
