@@ -1,7 +1,7 @@
 import express from "express"
 const router = express.Router();
 
-const fakeDb = [
+let fakeDb = [
     {
         "task": "sf tv",
         "hr": 22,
@@ -32,8 +32,9 @@ const fakeDb = [
 //read data from database and return to the client
 router.get("/", (req,res) =>{
 
+    //do database query
     res.json({
-        message: "todo do Get method",
+        message: "List of task",
         data: fakeDb
     })
 })
@@ -43,7 +44,7 @@ router.post("/", (req,res) =>{
     console.log("got hit", req.body);
     fakeDb.push(req.body);
     res.json({
-        message: "todo do POST method",
+        message: "New task has been added",
     })
 
 })
@@ -51,7 +52,7 @@ router.post("/", (req,res) =>{
 //update data from client and create new record into the database
 router.put("/", (req,res) =>{
     res.json({
-        message: "todo do PUT method",
+        message: "todo POST put",
     })
 })
 
@@ -63,11 +64,7 @@ router.delete("/", (req,res) =>{
     const { _id } = req.body; //destructure
 
     //deleting item from fakeDb and overiding the data
-    // fakeDb = fakeDb.filter((item) => item._id !== _id);
-
     fakeDb = fakeDb.filter((item) => item._id !== _id);
-
-    // console.log(`_id:${req.body} has been deleteds; `, fakeDb)
 
     res.json({
         message: "Deleted successfully",
