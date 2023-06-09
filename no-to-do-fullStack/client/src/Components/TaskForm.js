@@ -8,7 +8,7 @@ export const TaskForm = () => {
     <Form className=" border p-2 bg-light rounded">
       <Row className="g-2">
         <Col md="6">
-          <FloatingLabel controlId='floatingInput' className='mb-3'>
+          <FloatingLabel controlId='floatingInput' label="Add New Task" className='mb-3'>
           <Form.Control required placeholder="Add Task" name="task" />
           </FloatingLabel>
         </Col>
