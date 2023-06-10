@@ -1,6 +1,7 @@
 import express from "express"
 import taskRouter from "./src/routers/taskRouter.js"
 
+
 const app = express();
 const PORT = 8000;
 
@@ -22,5 +23,6 @@ app.get("/", (req, res) =>{
 //listen to port
 app.listen(PORT, (error) =>{
     error && console.log(error.message);
+    // ``: is template literal
     console.log(`Server running at http://localhost:${PORT}`)
 })
