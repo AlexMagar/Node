@@ -49,10 +49,22 @@ router.post("/", (req,res) =>{
 
 })
 
+// fakeDb[3].type= "bad";
+// console.log(fakeDb);
 //update data from client and create new record into the database
 router.put("/", (req,res) =>{
+    // console.log(req.body._id);
+    const { type, _id} = req.body; //destructure
+    fakeDb = fakeDb.map((item) => {
+        if(item._id === _id){
+            item.type = type;
+            return { ...item, type};
+        }
+        return item;
+    })
+
     res.json({
-        message: "todo POST put",
+        message: "The task had been switched",
     })
 })
 
