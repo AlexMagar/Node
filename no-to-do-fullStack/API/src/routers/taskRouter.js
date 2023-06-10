@@ -1,4 +1,5 @@
 import express from "express"
+import  createTask  from "../model/TaskModel";
 const router = express.Router();
 
 let fakeDb = [
@@ -40,12 +41,22 @@ router.get("/", (req,res) =>{
 })
 
 //receive data from client and create new record into the database
-router.post("/", (req,res) =>{
-    console.log("got hit", req.body);
-    fakeDb.push(req.body);
-    res.json({
-        message: "New task has been added",
-    })
+router.post("/", async (req,res) =>{
+
+    try {
+        const result = await createTask(req.body);
+
+        result?._id ? res.json({
+            status: "sucess",
+            message: "New task has been added sucessfully",
+        })
+        : res.json({
+            status: "sucess",
+            message: "unable to add the data",
+        });
+    } catch (error) {
+        console.log(error);
+    }
 
 })
 
