@@ -12,10 +12,10 @@ POST http://localhost:8000/api/v1/task
 Content-Type: application/json
 
 {
-    "task": "sf tv",
+    "task": "playing video games",
     "hr": 22,
-    "type": "entry",
-    "_id": "004"
+    "type": "entry"
+   
 }
 
 ### updat task at api 
@@ -23,14 +23,9 @@ PUT http://localhost:8000/api/v1/task
 Content-Type: application/json
 
 {
-    "type": "Kiran",
-    "_id": "004"
+    "_id": "6485164d3af54de5ec819d30",
+    "type": "bad"
 }
 
 ### delete task from  api 
-Delete http://localhost:8000/api/v1/task
-Content-Type: application/json
-
-{
-    "_id": "004"
-}
+Delete http://localhost:8000/api/v1/task/6485164d3af54de5ec819d30
