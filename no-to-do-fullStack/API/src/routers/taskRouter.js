@@ -1,44 +1,65 @@
 import express from "express"
-import  createTask  from "../model/TaskModel";
+import  {createTask, deleteTaskById, readTasks, switchTask}  from "../model/TaskModel.js";
+
+
 const router = express.Router();
 
-let fakeDb = [
-    {
-        "task": "sf tv",
-        "hr": 22,
-        "type": "entry",
-        "_id": "001"
-      },
-      {
-        "task": "sf tv",
-        "hr": 22,
-        "type": "entry",
-        "_id": "002"
-      },
-      {
-        "task": "sf tv",
-        "hr": 22,
-        "type": "entry",
-        "_id": "003"
-      },
-      {
-        "task": "sf tv",
-        "hr": 22,
-        "type": "entry",
-        "_id": "004"
-      }
-];
+// let fakeDb = [
+//     {
+//         "task": "sf tv",
+//         "hr": 22,
+//         "type": "entry",
+//         "_id": "001"
+//       },
+//       {
+//         "task": "sf tv",
+//         "hr": 22,
+//         "type": "entry",
+//         "_id": "002"
+//       },
+//       {
+//         "task": "sf tv",
+//         "hr": 22,
+//         "type": "entry",
+//         "_id": "003"
+//       },
+//       {
+//         "task": "sf tv",
+//         "hr": 22,
+//         "type": "entry",
+//         "_id": "004"
+//       }
+// ];
 
 
 //read data from database and return to the client
-router.get("/", (req,res) =>{
+router.get("/", async (req,res) =>{
 
-    //do database query
-    res.json({
-        message: "List of task",
-        data: fakeDb
-    })
-})
+    try {
+        //get data from db
+        const taskList = await readTasks();
+        console.log("Can i see what in here: ",taskList)
+
+        taskList?._id
+        ?
+        //do database query
+        res.json({
+            status: "sucess",
+            message: "From Get method",
+            taskList,
+        })
+        : res.json({
+            status: "error",
+            message: "could not do GET method"
+        })
+    } catch (error) {
+        res.json({
+            status: "Error",
+            message: "Something wrong with the GET method"
+        })
+        console.log(error)
+    }
+});
 
 //receive data from client and create new record into the database
 router.post("/", async (req,res) =>{
@@ -46,54 +67,94 @@ router.post("/", async (req,res) =>{
     try {
         const result = await createTask(req.body);
 
-        result?._id ? res.json({
+        result?._id 
+        ? res.json({
             status: "sucess",
             message: "New task has been added sucessfully",
         })
         : res.json({
-            status: "sucess",
+            status: "error",
             message: "unable to add the data",
         });
     } catch (error) {
-        console.log(error);
+        res.json({
+            status: "error",
+            message: error.message,
+        });
+        console.log(error)
     }
-
-})
+});
 
 // fakeDb[3].type= "bad";
 // console.log(fakeDb);
 //update data from client and create new record into the database
-router.put("/", (req,res) =>{
+router.put("/", async (req,res) =>{
     // console.log(req.body._id);
-    const { type, _id} = req.body; //destructure
-    fakeDb = fakeDb.map((item) => {
-        if(item._id === _id){
-            item.type = type;
-            return { ...item, type};
-        }
-        return item;
-    })
+    // fakeDb = fakeDb.map((item) => {
+    //     if(item._id === _id){
+    //         item.type = type;
+    //         return { ...item, type};
+    //     }
+    //     return item;
+    // })
 
-    res.json({
-        message: "The task had been switched",
-    })
+    try {
+        const { _id, type} = req.body; //destructure
+
+
+        // update the db
+        const result = await switchTask(_id, type);
+        result?._id
+        ? res.json({
+            status: "sucess",
+            message: "The task has been switched successfully"
+        })
+        : res.json({
+            status: "error",
+            message: "The task did not switched"
+        });
+        
+    } catch (error) {
+        console.log(error)
+
+        res.json({
+            status: "error",
+            message: "The task did not switched"
+        })
+        
+    }
 })
 
 //delete data from client and create new record into the database
-router.delete("/", (req,res) =>{
-    console.log("what is in delete: ",req.body)
+router.delete("/:_id", async (req,res) =>{
+
+    // console.log("what is in delete: ",req.body)
     // fakeDb.pop(req.body);
 
-    const { _id } = req.body; //destructure
-
     //deleting item from fakeDb and overiding the data
-    fakeDb = fakeDb.filter((item) => item._id !== _id);
+    // fakeDb = fakeDb.filter((item) => item._id !== _id);
 
-    res.json({
-        message: "Deleted successfully",
+    try {
+        const { _id } = req.params; //destructure
+        const result = await deleteTaskById(_id);
 
-    })
+        result?._id
+        ? res.json({
+            status: "sucess",
+            message: "Deleted successfully"
+        })
+        : res.json({
+            status: "error",
+            message: "unable to delete"
+        })
+        
+    } catch (error) {
+        console.log(error) // clg - shortcut for console.log()
+
+        res.json({
+            status:"error",
+            message: "something gone wrong"
+        })
+    }
 })
-
-
 export default router;
