@@ -19,16 +19,19 @@ app.use("/api/v1/task", taskRouter);
 
 
 //router
-app.get("/", (req, res) =>{
+app.use("/", (req, res) =>{
     res.json({
         status: "Sucess",
-        message: "server running normal",
+        message: "server running normal"
     })
-})
+});
 
-//listen to port
+//open port for http request to access the server
 app.listen(PORT, (error) =>{
-    error && console.log(error.message);
-    // ``: is template literal
-    console.log(`Server running at http://localhost:${PORT}`)
+    // error && console.log(error.message);
+    // // ``: is template literal
+    // console.log(`Server running at http://localhost:${PORT}`)
+    error 
+    ? console.log(error.message)
+    : console.log(`Server running at http://localhost:${PORT}`)
 })
