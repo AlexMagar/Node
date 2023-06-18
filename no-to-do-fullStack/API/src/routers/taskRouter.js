@@ -40,11 +40,11 @@ router.get("/", async (req,res) =>{
         const taskList = await readTasks();
         console.log("Can i see what in here: ",taskList)
 
-        taskList?._id
+        taskList?.length
         ?
         //do database query
         res.json({
-            status: "sucess",
+            status: "success",
             message: "From Get method",
             taskList,
         })
@@ -54,7 +54,7 @@ router.get("/", async (req,res) =>{
         })
     } catch (error) {
         res.json({
-            status: "Error",
+            status: "error",
             message: "Something wrong with the GET method"
         })
         console.log(error)
@@ -67,9 +67,9 @@ router.post("/", async (req,res) =>{
     try {
         const result = await createTask(req.body);
 
-        result?._id 
+        result?._id                                                                                                                                                                                                                                                                                                                   
         ? res.json({
-            status: "sucess",
+            status: "success",
             message: "New task has been added sucessfully",
         })
         : res.json({
@@ -106,7 +106,7 @@ router.put("/", async (req,res) =>{
         const result = await switchTask(_id, type);
         result?._id
         ? res.json({
-            status: "sucess",
+            status: "success",
             message: "The task has been switched successfully"
         })
         : res.json({
@@ -126,7 +126,7 @@ router.put("/", async (req,res) =>{
 })
 
 //delete data from client and create new record into the database
-router.delete("/:_id", async (req,res) =>{
+router.delete("/", async (req,res) =>{
 
     // console.log("what is in delete: ",req.body)
     // fakeDb.pop(req.body);
@@ -135,17 +135,16 @@ router.delete("/:_id", async (req,res) =>{
     // fakeDb = fakeDb.filter((item) => item._id !== _id);
 
     try {
-        const { _id } = req.params; //destructure
-        const result = await deleteTaskById(_id);
+        const result = await deleteManyTasks(req.body);
 
-        result?._id
+        result?.deleteCount > 0
         ? res.json({
-            status: "sucess",
-            message: "Deleted successfully"
+            status: "success",
+            message: "The tasks been deleted successfully"
         })
         : res.json({
             status: "error",
-            message: "unable to delete"
+            message: "unable to delete the task"
         })
         
     } catch (error) {
@@ -153,7 +152,7 @@ router.delete("/:_id", async (req,res) =>{
 
         res.json({
             status:"error",
-            message: "something gone wrong"
+            message: "Error deleting the task"
         })
     }
 })
