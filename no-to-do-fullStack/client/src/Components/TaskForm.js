@@ -3,45 +3,38 @@ import { Button, FloatingLabel } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { fetchTasks, postTask } from '../helper/axiosHelper';
-import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import 'react-toastify/dist/ReactToastify.css';
+import { addTaskList } from '../redux/taskAction';
 
 
 export const TaskForm = ({getTaskList}) => {
+  const dispatch = useDispatch();
 
   const  [form, setForm] = useState({});
 
+  // const {addTaskList}
+
   const handleOnChange = (e) =>{
     const {name, value} = e.target;
-    console.log(name, value);
+    console.log("Name is: ",name + " Value is: ", value);
+
     setForm({
       ...form,
-      [name]: name,
+      [name]: value,
     })
   }
+  console.log("what is comming from the form: ",form)
 
-  console.log(form)
 
   const handleOnSubmit = async (e) =>{
     e.preventDefault(); //prevent from browser reloading
-    console.log(form)
 
-    //send data to the api
-    const respPromise = postTask(form);
+    //check if availabe hr is enough
 
-    toast.promise(respPromise, {
-      pending: "please wait....",
-    });
+    console.log("i am also from form:",form)
 
-    const {status, message} = await respPromise;
-    console.log(status)
-    toast[status](message);
-
-    if(status === 'success'){
-      //call the api to fetch all the task
-     getTaskList();
-      // console.log(data)
-    }
+    dispatch(addTaskList(form));
   };
 
   return (
