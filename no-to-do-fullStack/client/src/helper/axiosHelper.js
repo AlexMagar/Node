@@ -15,9 +15,29 @@ export const postTask = async (taskObj) =>{
 export const fetchTasks = async () =>{
     try {
         const {data} = await axios.get(api);
+        console.log("axiosHelper, data from dbs : ", data)
         return data;
 
     } catch (error) {
         console.log(error)
     }
 };
+
+export const switchTask = async (taskObj) =>{
+    try {
+        const {data} = await axios.patch(api, taskObj);
+        return data;
+
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+export const deleteTasks = async (ids) =>{
+    try {
+        const {data} = await axios.delete(api, {data: ids});
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
