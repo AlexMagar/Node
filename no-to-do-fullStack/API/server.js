@@ -2,17 +2,21 @@ import express from "express"
 import taskRouter from "./src/routers/taskRouter.js"
 import { mongoConnect } from "./src/config/mongoDb.js";
 import cors from "cors"
+import path from 'path'
 
+const __dirname = path.resolve();
+console.log(__dirname)
 
 const app = express();
 const PORT = 8000;
-// connect mongoDb
 
+// connect mongoDb
 mongoConnect();
 
 //middleware
 app.use(express.json());
 app.use(cors());
+app.use(express.static(__dirname + "/build"))
 
 //api endpoints
 app.use("/api/v1/task", taskRouter);
@@ -20,10 +24,7 @@ app.use("/api/v1/task", taskRouter);
 
 //router
 app.use("/", (req, res) =>{
-    res.json({
-        status: "Sucess",
-        message: "server running normal"
-    })
+    res.sendFile(__dirname + "/index.hmtl");
 });
 
 //open port for http request to access the server
